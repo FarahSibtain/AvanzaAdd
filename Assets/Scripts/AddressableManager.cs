@@ -28,10 +28,9 @@ public class AddressableManager : MonoBehaviour
     TMPro.TMP_Text debugLogger;
 
     [SerializeField]
-    GameObject loading;
+    TMPro.TMP_Text logger;
 
     GameObject playerController;
-
 
     // Start is called before the first frame update
     void Start()
@@ -52,12 +51,12 @@ public class AddressableManager : MonoBehaviour
         {
             if (obj.Status != AsyncOperationStatus.Succeeded)
             {
-                debugLogger.text += "Addressables Initialization failed";
+                debugLogger.text += "Addressables Initialization failed\n";
                 return;
             }
 
             HashSet<object> _keys = new HashSet<object>(obj.Result.Keys);
-            debugLogger.text += "\n_keys.Count: " + _keys.Count + "\n";
+            debugLogger.text += "_keys.Count: " + _keys.Count + "\n";
 
             musicAssetReference.LoadAssetAsync<AudioClip>().Completed += (clip) =>
             {
@@ -81,27 +80,33 @@ public class AddressableManager : MonoBehaviour
         }
     }
 
-    private void OnDestroy()
-    {
-        playerArmatureReference.ReleaseInstance(playerController);
-        logo.ReleaseAsset();
-    }
+    //private void OnDestroy()
+    //{
+    //    playerArmatureReference.ReleaseInstance(playerController);
+    //    logo.ReleaseAsset();
+    //}
 
     public void LoadPlayer()
     {
+        logger.text = "Loading player";
+        if (playerArmatureReference.Asset != null)
+        {
+            logger.text = "Player already loaded\n";
+            return;
+        }
         playerArmatureReference.LoadAssetAsync<GameObject>().Completed += (playerArmatureAsset) =>
         {
             playerArmatureReference.InstantiateAsync().Completed += (playerArmatureGO) =>
             {
                 if (playerArmatureGO.Status != AsyncOperationStatus.Succeeded)
                 {
-                    debugLogger.text += "Could not load player Armature\n";
+                    logger.text = "Could not load player Armature\n";
                 }
                 else
                 {
-                    playerController = playerArmatureGO.Result;
-                    debugLogger.text += "Robot Instantiated" + playerController.name + "\n";
+                    playerController = playerArmatureGO.Result;                    
                     cinemachineVirtualCamera.Follow = playerController.transform.Find("PlayerCameraRoot");
+                    logger.text = "Player loaded!";
                 }
             };
         };
@@ -109,33 +114,28 @@ public class AddressableManager : MonoBehaviour
 
     public void LoadIcon()
     {
+        logger.text = "Loading logo";
+        if (logo.Asset != null)
+        {
+            logger.text = "Logo already loaded\n";
+            return;
+        }
         logo.LoadAssetAsync<Texture2D>().Completed += (texture) =>
         {
-            debugLogger.text += "Logo LoadAssetAsync Texture2D Completed\n";
-
             if (texture.Status == AsyncOperationStatus.Succeeded)
             {
                 rawImageLogo.texture = texture.Result;
                 Color currentColor = rawImageLogo.color;
                 currentColor.a = 1.0f;
                 rawImageLogo.color = currentColor;
+                logger.text = "Logo loaded\n";
             }
             else
             {
-                debugLogger.text += "texture.Status: " + texture.Status.ToString() + "\n";
-                // debugLogger.text += "loc.Result[0].PrimaryKey: " + texture + "\n";
+                logger.text = "Could not load Logo";                
             }
         };
     }
-
-    private void Update()
-    {
-        if (LoadingComplete())
-        {
-            loading.SetActive(false);
-        }
-    }
-
     private bool LoadingComplete()
     {
         return (playerArmatureReference.Asset != null && musicAssetReference.Asset != null && logo.Asset != null);
