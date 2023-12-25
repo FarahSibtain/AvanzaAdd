@@ -41,38 +41,32 @@ public class AddressableManager : MonoBehaviour
         }
         catch(Exception e)
         {
-            debugLogger.text = "Exception Occured in Initializing addressables " + e.Message;
+            logger.text = "Exception Occured in Initializing addressables " + e.Message;
         }
     }
 
     private void AddressableManager_Completed(UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<UnityEngine.AddressableAssets.ResourceLocators.IResourceLocator> obj)
     {
+        if (obj.Status != AsyncOperationStatus.Succeeded)
+        {
+            logger.text = "Addressables Initialization failed";
+            return;
+        }
         try
         {
-            if (obj.Status != AsyncOperationStatus.Succeeded)
-            {
-                debugLogger.text += "Addressables Initialization failed\n";
-                return;
-            }
-
-            HashSet<object> _keys = new HashSet<object>(obj.Result.Keys);
-            debugLogger.text += "_keys.Count: " + _keys.Count + "\n";
-
+            logger.text = "Addressables Initialized!";
             musicAssetReference.LoadAssetAsync<AudioClip>().Completed += (clip) =>
             {
                 if (clip.Status != AsyncOperationStatus.Succeeded)
                 {
-                    debugLogger.text += "Could not load music\n" + clip.Status.ToString();
-                    //debugLogger.text += "clip.Result : " + clip.Result.ToString() + "\n";
+                    debugLogger.text += "Could not load music" + clip.Status.ToString();
                 }
                 else
                 {
-                    debugLogger.text += "Music loaded\n";
+                    debugLogger.text = "Music loaded";
                     AudioSource.PlayClipAtPoint(clip.Result, Vector3.zero);
                 }
             }; 
-           
-            debugLogger.text += "Addressables Initialized!\n";
         }
         catch (Exception e)
         {

@@ -38,11 +38,11 @@ public class RoslynCodeRunner : SingletonBehaviour<RoslynCodeRunner>
         {           
             code = $"{(updateCode ?? codeString.text)}";
             ScriptState<object> result = CSharpScript.RunAsync(code, SetDefaultImports()).Result;
-            logger.text = "Script executed";
+            logger.text = "Script executed successfully";
         }
         catch (Exception e)
         {
-            logger.text = "Exception occurred: " + e.Message;
+            logger.text = "Exception occurred when loading script: " + e.Message;
         }
     }
 
