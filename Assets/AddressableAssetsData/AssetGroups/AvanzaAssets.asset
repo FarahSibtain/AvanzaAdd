@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: AvanzaAssets
+  m_EditorClassIdentifier: 
+  m_GroupName: AvanzaAssets
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 9af21a356d1a43a4fbff1309e2cf90b9
+  m_SerializeEntries:
+  - m_GUID: 3bba15939cbf4a849b0d81214480e395
+    m_Address: Assets/Texture/avanzainnovation.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 2174286bb23176c45bb802f011489c4f
+    m_Address: Assets/Audio/acoustic-guitar-loop-f-91bpm-132687.mp3
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: c5cedaa57bb609c43b6b14db940c0ed7, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 9aaf512e2f37020469146e724098ed5b, type: 2}
+    - {fileID: 11400000, guid: dd80eca346376a948a2f227223bf5cfc, type: 2}
